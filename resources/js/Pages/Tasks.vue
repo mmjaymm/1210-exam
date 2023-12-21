@@ -130,6 +130,8 @@ const searchTasks = async () => {
             params: { search: searchTerm.value },
         });
         tasks.value = response.data.data.data;
+    } else {
+        await getTasks();
     }
 };
 </script>
@@ -237,7 +239,7 @@ const searchTasks = async () => {
                     >
                         <div class="p-5">
                             <label
-                                for="default-search"
+                                for="search"
                                 class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
                                 >Search</label
                             >
