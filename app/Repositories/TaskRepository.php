@@ -80,9 +80,16 @@ class TaskRepository
         return $task;
     }
 
-    public function allTasks($perPage = 10)
+    public function allTasks($perPage = 10, $search = null)
     {
-        $tasks = Task::latest()->paginate($perPage);
+        $tasks = Task::latest();
+
+        if ($search) {
+            $tasks->where('name', 'LIKE', "%{$search}%");
+            // $tasks->where('name', $search); //exact task name
+        }
+
+        $tasks = $tasks->paginate($perPage);
 
         if (!$tasks) {
             throw new \Exception("No Records Found!", HttpResponse::HTTP_NOT_FOUND);

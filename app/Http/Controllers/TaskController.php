@@ -40,10 +40,11 @@ class TaskController extends Controller
 
     public function getAllTasks(Request $request)
     {
+
         try {
             $pageSize = $request->input('page_size');
-
-            $tasks = $this->taskRepo->allTasks($pageSize);
+            $searchTerm = $request->input('search');
+            $tasks = $this->taskRepo->allTasks($pageSize, $searchTerm);
             return $this->successResponse($tasks, 'Task Retrieved!', HttpResponse::HTTP_OK);
         } catch (\Exception $ex) {
             return $this->errorResponse($ex->getCode(), $ex->getMessage());
