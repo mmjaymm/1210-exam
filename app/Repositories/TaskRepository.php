@@ -95,10 +95,6 @@ class TaskRepository
     {
         $task = $this->findTask($taskID);
 
-        if (!$task->attachments->count()) {
-            throw new \Exception("No Attachments Found!", HttpResponse::HTTP_NOT_FOUND);
-        }
-
         return $task;
     }
 }

@@ -122,27 +122,6 @@ const formReset = () => {
 
     selectedTask.value = null;
 };
-
-// const updateTask = async () => {
-//     const formData = new FormData(e.target);
-//     let files = taskAttachments.value.files;
-
-//     if (files.length) {
-//         for (let i = 0; i < files.length; i++) {
-//             formData.append("documents[]", files[i]);
-//         }
-//     } else {
-//         formData.delete("documents");
-//     }
-
-//     formData.append("_method", "PUT");
-//     await axios
-//         .post(`/api/task/${selectedTask.value}/update`, formData)
-//         .then((response) => {
-//             console.log(response.data);
-//         })
-//         .catch((err) => console.error(err));
-// };
 </script>
 
 <template>
@@ -306,7 +285,9 @@ const formReset = () => {
                                     </td>
                                 </tr>
                                 <tr v-else class="bg-white border-b">
-                                    <td colspan="5">No Record Found !</td>
+                                    <td class="text-center" colspan="5">
+                                        No Record Found !
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>

@@ -73,7 +73,6 @@ class TaskController extends Controller
     public function update(Request $request, int $id)
     {
         try {
-            $request->request->remove('_method');
             $task = $this->taskSrvc->updateTask($request, $id);
             return $this->successResponse($task, 'Task Updated!', HttpResponse::HTTP_OK);
         } catch (\Exception $ex) {

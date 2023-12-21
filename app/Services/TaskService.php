@@ -14,6 +14,7 @@ class TaskService
 {
     protected $taskRepo;
     protected $taskDocuRepo;
+    private $attachments;
     /**
      *
      */
@@ -35,7 +36,7 @@ class TaskService
     public function uploadTaskAttachments($request)
     {
         if ($request->hasFile('documents')) {
-            $documents = [];
+            $this->attachments = [];
 
             foreach ($request->file('documents') as $key => $attachment) {
                 $pathfile = $this->uploadAttachment($attachment, 'task-documents');
@@ -43,7 +44,7 @@ class TaskService
                     return false;
                 }
 
-                $documents[$key]['url'] = $pathfile;
+                $this->attachments[$key]['url'] = $pathfile;
             }
             return 'with-attachment';
         }
@@ -65,11 +66,11 @@ class TaskService
 
             if ($documents == 'with-attachment') {
                 $taskID = $task->id;
-                $documents = collect($documents)->map(function ($document) use ($taskID) {
+                $taskAttachments = collect($this->attachments)->map(function ($document) use ($taskID) {
                     $document['task_id'] = $taskID;
                     return $document;
                 });
-                $this->taskDocuRepo->insertTaskDocuments($documents->toArray());
+                $this->taskDocuRepo->insertTaskDocuments($taskAttachments->toArray());
             }
 
             return true;
@@ -97,14 +98,15 @@ class TaskService
                 }
 
                 //insert new attachment
-                $documents = collect($documents)->map(function ($document) use ($taskID) {
+                $taskAttachments = collect($this->attachments)->map(function ($document) use ($taskID) {
                     $document['task_id'] = $taskID;
                     return $document;
                 });
-                $this->taskDocuRepo->insertTaskDocuments($documents->toArray());
+
+                $this->taskDocuRepo->insertTaskDocuments($taskAttachments->toArray());
             }
 
-            $taskData = $request->all();
+            $taskData = $request->except(['_method', 'documents']);
             $this->taskRepo->updateTask($taskData, $taskID);
 
             return true;
